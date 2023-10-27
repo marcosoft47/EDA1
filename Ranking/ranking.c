@@ -25,35 +25,31 @@ int main(){
 
     //Começar FDE prioridade simples
     struct descF *desc = NULL;
-    info *pessoa = NULL;
+    info *pessoa = NULL, *auxinfo;
     pessoa = iniciaInfo();
-    desc = cria(SIZECSV);
+    desc = cria(sizeof(info));
     int num = 0;
     while(contador <= 5){
-        // num = rand() % SIZECSV;
-        // printf("%s\n",getfield(linha[num],2));
-        // strcpy(pessoa->nome,getfield(linha[num],1));
-        // pessoa->matricula = atoi(getfield(linha[num],2));
+        num = rand() % SIZECSV;
+        printf("%i",atoi(getfield(linha[num],2)));
+        strcpy(pessoa->nome,getfield(linha[num],1));
+        pessoa->matricula = atoi(getfield(linha[num],2));
         // pessoa->ranking = atoi(getfield(linha[num],3));
         // strcpy(pessoa->curso,getfield(linha[num],4));
-        strcpy(pessoa->nome,"eeee");
-        pessoa->matricula = 2;
-        pessoa->ranking = 3;
-        strcpy(pessoa->curso,"aeiou");
 
         insere(pessoa,desc);
         contador++;
     }
-    // for (contador = 0; contador <= 5;contador++)
+    // buscaNaCauda(auxinfo,desc);
+    // for (contador = 0; contador <= 5;contador++){
+    //     printf("%s %i\n", auxinfo->nome,auxinfo->ranking);
+    // }
     printf("Deu boa\n");
 }
 
 const char* getfield(char* line, int num){
     const char* tok;
-    for (tok = strtok(line, ",");
-            tok && *tok;
-            tok = strtok(NULL, ",\n"))
-    {
+    for (tok = strtok(line, ","); tok && *tok; tok = strtok(NULL, ",")){
         if (!--num)
             return tok;
     }
