@@ -24,48 +24,61 @@ info *iniciaInfo(){
         strcpy(i->curso," ");
     }
     return i;
-    
 }
 
-/*************** INSERE A PARTIR DA FRENTE ***************/
-int insere(info *pInfo, struct descF *p)
-{
-  struct noFila *novoNoFila=NULL, *visitado=NULL;
-  if ((novoNoFila = (struct noFila *) malloc(sizeof(struct noFila))) != NULL)
-    { 
-	memcpy(&(novoNoFila->dados),pInfo, p->tamInfo);
-  	if(p->frente == NULL && p->cauda == NULL){ /*fila vazia*/  
-            novoNoFila->atras = novoNoFila->defronte = NULL;
-    	    p->frente = p->cauda = novoNoFila;
-    	}else{
-    	 	if(novoNoFila->dados.ranking < p->cauda->dados.ranking){ /*novo elemento � o de menor prioridade */
-    	 	 	novoNoFila->atras=NULL;
-    	 		novoNoFila->defronte=p->cauda;
-    	 		p->cauda->atras=novoNoFila;
-    	 		p->cauda=novoNoFila;
-    	 	}else{    	 
-                visitado = p->frente; /*maior prioridade na frente */
-
-                while(visitado->atras != NULL && (visitado->dados.ranking >= novoNoFila->dados.ranking)) 
-                    visitado = visitado->atras; /* A(idade) <= B(idade) */
-
-       	        if(visitado->dados.ranking < novoNoFila->dados.ranking){   /* novo item fica a frente do visitado */
-					novoNoFila->atras = visitado;
-
-      				if (visitado->defronte != NULL){
-                        novoNoFila->defronte = visitado->defronte;
-      				    visitado->defronte->atras = novoNoFila;
-      				}else{  // novo item � o de maior prioridade de todos na fila, sendo a nova frente
-						novoNoFila->defronte = NULL;      
-						p->frente = novoNoFila;
-				    }	   
-					visitado->defronte = novoNoFila;  
-		        }
-            }	
-	    }
-	    return SUCESSO;
+struct noFila *iniciaNo(){
+    struct noFila *n=NULL;
+    info *i = iniciaInfo();
+    n = (struct noFila *) malloc(sizeof(struct noFila));
+    if (n){
+        n->atras = NULL;
+        n->defronte = NULL;
+        n->dados = *i;
     }
-	return FRACASSO;
+    return n;
+}
+/*************** INSERE A PARTIR DA FRENTE ***************/
+int insere(info *pInfo, struct descF *p, int* qntLoop)
+{
+    //Por algum motivo, ++ não funciona, mas += 1 funciona
+    *qntLoop += 1;
+    struct noFila *novoNoFila=NULL, *visitado=NULL;
+    if ((novoNoFila = (struct noFila *) malloc(sizeof(struct noFila))) != NULL){ 
+        memcpy(&(novoNoFila->dados),pInfo, p->tamInfo);
+        if(p->frente == NULL && p->cauda == NULL){ /*fila vazia*/  
+                novoNoFila->atras = novoNoFila->defronte = NULL;
+                p->frente = p->cauda = novoNoFila;
+            }else{
+                if(novoNoFila->dados.ranking < p->cauda->dados.ranking){ /*novo elemento é o de menor prioridade */
+                    novoNoFila->atras=NULL;
+                    novoNoFila->defronte=p->cauda;
+                    p->cauda->atras=novoNoFila;
+                    p->cauda=novoNoFila;
+                }else{    	 
+                    visitado = p->frente; /*maior prioridade na frente */
+
+                    while(visitado->atras != NULL && (visitado->dados.ranking >= novoNoFila->dados.ranking)) {
+                        visitado = visitado->atras; /* A(idade) <= B(idade) */
+                        *qntLoop += 1;
+                        }
+
+                    if(visitado->dados.ranking < novoNoFila->dados.ranking){   /* novo item fica a frente do visitado */
+                        novoNoFila->atras = visitado;
+
+                        if (visitado->defronte != NULL){
+                            novoNoFila->defronte = visitado->defronte;
+                            visitado->defronte->atras = novoNoFila;
+                        }else{  // novo item é o de maior prioridade de todos na fila, sendo a nova frente
+                            novoNoFila->defronte = NULL;      
+                            p->frente = novoNoFila;
+                        }	   
+                        visitado->defronte = novoNoFila;  
+                    }
+                }	
+            }
+        return SUCESSO;
+    }
+    return FRACASSO;
 }
 
 

@@ -39,7 +39,7 @@ struct descF{ 	struct noFila *frente;
 
 //======================FILA=====================
 struct descF * cria(int tamInfo);
-int insere(info *novo,struct descF *p);
+int insere(info *novo,struct descF *p, int *qntLoop);
 int tamanhoDaFila(struct descF *p);
 int reinicia(struct descF *p);
 struct descF * destroi(struct descF *p);
