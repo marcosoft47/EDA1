@@ -16,23 +16,25 @@
 #define debugging  1
 
 typedef struct{ 
-		        char nome[30];
-				int matricula;
-				int ranking;
-				char curso[30];
+	char nome[30];
+	int matricula;
+	int ranking;
+	char curso[30];
 }info;
 
 
-struct noFila{ info dados;
-		       struct noFila *atras;
-               struct noFila *defronte;
-	      };
+struct noFila{
+	info dados;
+	struct noFila *atras;
+    struct noFila *defronte;
+};
 
-struct descF{ 	struct noFila *frente;
-	        	struct noFila *cauda;
-                int tamInfo;
-		};
-
+struct descF{
+	struct noFila *frente;
+	struct noFila *cauda;
+	struct noFila *refMovel;
+    int tamInfo;
+};
 
 //======================APLICACAO=====================
 
@@ -40,6 +42,7 @@ struct descF{ 	struct noFila *frente;
 //======================FILA=====================
 struct descF * cria(int tamInfo);
 int insere(info *novo,struct descF *p, int *qntLoop);
+int insereMovel(info *pInfo, struct descF *p, int* qntLoop);
 int tamanhoDaFila(struct descF *p);
 int reinicia(struct descF *p);
 struct descF * destroi(struct descF *p);
@@ -49,4 +52,5 @@ int remove_(info *reg, struct descF *p);
 int testaVazia(struct descF *p);
 int inverte(struct descF *p);
 info *iniciaInfo();
+struct noFila *iniciaNo();
 
