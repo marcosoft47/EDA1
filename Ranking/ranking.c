@@ -21,6 +21,7 @@ int main(){
     int contador = 0, running = 1, input = 0, escolha = 0;
     //Usar media como float quebra todos os calculos de média
     int media = 0;
+    clock_t antes, diferenca, msec;
 
     int numTestes[] = {500, 1000, 1500, 2000, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000};
     size_t qntTestes = sizeof(numTestes)/sizeof(numTestes[0]);
@@ -40,6 +41,8 @@ int main(){
         printf("(0) Sair do programa\n");
         printf("(1) Teste manual FDE sem referencial móvel\n");
         printf("(2) Teste automático de FDE sem referencial móvel\n");
+        printf("(3) Teste manual FDE com referencial móvel\n");
+        printf("(4) Teste automático de FDE com referencial móvel\n");
         //Começar FDE prioridade simples
         scanf("%d", &escolha);
         switch (escolha)
@@ -58,12 +61,15 @@ int main(){
         case 2:
             printf("Realizando cálculos...\n");
             for (int i = 0; i < qntTestes; i++){
+                antes = clock();
                 for(contador = 0; contador < LOOPS; contador++){
                     resultados[contador][i] = FDE(linha, numTestes[i], NAO);
                     media += resultados[contador][i];
                 }
+                diferenca = clock() - antes;
+                msec = diferenca * 1000 / CLOCKS_PER_SEC;
                 media /= LOOPS;
-                printf("Media de loops com fila de tamanho %d: %d\n", numTestes[i], media);
+                printf("Media de loops com fila de tamanho %d: %d (%d.%ds)\n", numTestes[i], media, msec/1000, msec%1000);
                 media = 0;
             }
             clear();
@@ -78,12 +84,15 @@ int main(){
         case 4:
             printf("Realizando cálculos...\n");
             for (int i = 0; i < qntTestes; i++){
+                antes = clock();
                 for(contador = 0; contador < LOOPS; contador++){
                     resultados[contador][i] = FDE(linha, numTestes[i], SIM);
                     media += resultados[contador][i];
                 }
+                diferenca = clock() - antes;
+                msec = diferenca * 1000 / CLOCKS_PER_SEC;
                 media /= LOOPS;
-                printf("Media de loops com fila de tamanho %d usando ref movel: %d\n", numTestes[i], media);
+                printf("Media de loops com fila de tamanho %d com ref movel: %d (%d.%ds)\n", numTestes[i], media, msec/1000, msec%1000);
                 media = 0;
             }
             clear();
@@ -130,23 +139,23 @@ int FDE(char linha[][64], int size, int usarRefMovel){
         pessoa->matricula = atoi(getfield(linha[num],2));
         pessoa->ranking = atoi(getfield(linha[num],3));
         strcpy(pessoa->curso,getfield(linha[num],4));
-        printf("%s %i %i %s\n", pessoa->nome, pessoa->matricula, pessoa->ranking, pessoa->curso);
-        if (usarRefMovel)
+        // printf("%s %i %i %s\n", pessoa->nome, pessoa->matricula, pessoa->ranking, pessoa->curso);
+        if (usarRefMovel){
             insereMovel(pessoa, desc, &qntLoop);
-        else
+        }else
             insere(pessoa,desc, &qntLoop);
         
         contador++;
     }
     /*Descomente para debug*/
-    struct noFila *auxno = NULL;
-    auxinfo = iniciaInfo();
-    buscaNaCauda(auxinfo,desc);
-    auxno = desc->cauda;
-    while (auxno != NULL){
-        printf("%s %i %i %s\n", auxno->dados.nome, auxno->dados.matricula, auxno->dados.ranking, auxno->dados.curso);
-        auxno = auxno->defronte;
-    }
+    // struct noFila *auxno = NULL;
+    // auxinfo = iniciaInfo();
+    // buscaNaCauda(auxinfo,desc);
+    // auxno = desc->cauda;
+    // while (auxno != NULL){
+    //     printf("%s %i %i %s\n", auxno->dados.nome, auxno->dados.matricula, auxno->dados.ranking, auxno->dados.curso);
+    //     auxno = auxno->defronte;
+    // }
 
     /*Recomente para dedebug*/
     desc = destroi(desc);
