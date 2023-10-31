@@ -42,7 +42,7 @@ struct descF{
 //======================FILA=====================
 struct descF * cria(int tamInfo);
 int insere(info *novo,struct descF *p, int *qntLoop);
-int insereMovel(info *pInfo, struct descF *p, int* qntLoop);
+int insereMovel(info *novo, struct descF *p, int *qntLoop);
 int tamanhoDaFila(struct descF *p);
 int reinicia(struct descF *p);
 struct descF * destroi(struct descF *p);

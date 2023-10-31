@@ -124,26 +124,31 @@ int insereMovel(info *pInfo, struct descF *p, int* qntLoop)
                     printf("Adicionar pela cauda\n");
                     visitado = p->cauda;
 
-                    while(visitado->defronte != NULL && (visitado->dados.ranking < novoNoFila->dados.ranking)) {
+                    while(visitado->defronte != NULL && visitado->dados.ranking < novoNoFila->dados.ranking) {
                         visitado = visitado->defronte;
                         *qntLoop += 1;
                     }
-                    novoNoFila->atras = visitado;
-                    novoNoFila->defronte = visitado->defronte;
-                    visitado->defronte->atras = novoNoFila;
-                    visitado->defronte = novoNoFila;
+                    printf("Visitado: %s %i %i %s\n", visitado->dados.nome, visitado->dados.matricula, visitado->dados.ranking, visitado->dados.curso);
+                    novoNoFila->defronte = visitado;
+                    novoNoFila->atras = visitado->atras;
+                    if (visitado->atras != NULL)
+                        visitado->atras->defronte = novoNoFila;
+                    visitado->atras = novoNoFila;
+                    printf("Novo nó: %s %i %i %s\n", novoNoFila->dados.nome, novoNoFila->dados.matricula, novoNoFila->dados.ranking, novoNoFila->dados.curso);
                 }else{
                     //Vai pelo ref até a cauda
                     printf("Adicionar pelo ref até a cauda\n");
                     visitado = p->refMovel;
 
-                    while(visitado->defronte != NULL && (visitado->dados.ranking >= novoNoFila->dados.ranking)) {
+                    while(visitado->atras != NULL && visitado->dados.ranking >= novoNoFila->dados.ranking) {
                         visitado = visitado->atras;
                         *qntLoop += 1;
                     }
+                    printf("Visitado: %s %i %i %s\n", visitado->dados.nome, visitado->dados.matricula, visitado->dados.ranking, visitado->dados.curso);
                     novoNoFila->atras = visitado;
                     novoNoFila->defronte = visitado->defronte;
-                    visitado->defronte->atras = novoNoFila;
+                    if (visitado->defronte != NULL)
+                        visitado->defronte->atras = novoNoFila;
                     visitado->defronte = novoNoFila;
                 }
 
@@ -154,27 +159,33 @@ int insereMovel(info *pInfo, struct descF *p, int* qntLoop)
                     printf("Adicionar pela frente\n");
                     visitado = p->frente;
 
-                    while(visitado->defronte != NULL && (visitado->dados.ranking >= novoNoFila->dados.ranking)) {
+                    while(visitado->atras != NULL && visitado->dados.ranking >= novoNoFila->dados.ranking) {
                         visitado = visitado->atras;
                         *qntLoop += 1;
                     }
+                    printf("Visitado: %s %i %i %s\n", visitado->dados.nome, visitado->dados.matricula, visitado->dados.ranking, visitado->dados.curso);
                     novoNoFila->atras = visitado;
                     novoNoFila->defronte = visitado->defronte;
-                    visitado->defronte->atras = novoNoFila;
+                    if (visitado->defronte != NULL)
+                        visitado->defronte->atras = novoNoFila;
                     visitado->defronte = novoNoFila;
                 }else{
                     //Vai pelo ref até a frente
                     printf("Adicionar pelo ref até a frente\n");
                     visitado = p->refMovel;
 
-                    while(visitado->defronte != NULL && (visitado->dados.ranking < novoNoFila->dados.ranking)) {
+                    while(visitado->defronte != NULL && visitado->dados.ranking < novoNoFila->dados.ranking) {
                         visitado = visitado->defronte;
                         *qntLoop += 1;
                     }
-                    novoNoFila->atras = visitado;
-                    novoNoFila->defronte = visitado->defronte;
-                    visitado->defronte->atras = novoNoFila;
-                    visitado->defronte = novoNoFila;
+                    printf("Visitado: %s %i %i %s\n", visitado->dados.nome, visitado->dados.matricula, visitado->dados.ranking, visitado->dados.curso);
+                    novoNoFila->defronte = visitado;
+                    novoNoFila->atras = visitado->atras;
+                    if (visitado->atras != NULL)
+                        visitado->atras->defronte = novoNoFila;
+                    visitado->atras = novoNoFila;
+                    printf("Novo nó: %s %i %i %s\n", novoNoFila->dados.nome, novoNoFila->dados.matricula, novoNoFila->dados.ranking, novoNoFila->dados.curso);
+                    printf("Atrás: %s %i %i %s\n", novoNoFila->atras->dados.nome, novoNoFila->atras->dados.matricula, novoNoFila->atras->dados.ranking, novoNoFila->atras->dados.curso);
                 }
             }
         }
